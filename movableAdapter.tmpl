@@ -1,0 +1,9 @@
+package adapters
+
+import "github.com/bindasov/ioc/models"
+
+type MovableAdapter interface {
+{{range . -}}
+    {{.Name.Action}}{{title .Name.Property}}({{.InputParams}}){{.Output}}
+{{end -}}
+}
