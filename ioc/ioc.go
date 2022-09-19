@@ -9,7 +9,7 @@ type IoC struct {
 	containerName string
 }
 
-func (i *IoC) Resolve(key string, args ...interface{}) commands.Command {
+func (i *IoC) Resolve(key string, args ...interface{}) interface{} {
 	if _, ok := i.scopes[i.containerName][key]; ok {
 		return i.scopes[i.containerName][key](args...)
 	}
