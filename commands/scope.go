@@ -1,9 +1,9 @@
 package commands
 
 type createNewScope struct {
-	scopes       map[string]map[string]func(args ...interface{}) Command
+	scopes       map[string]map[string]func(args ...interface{}) interface{}
 	id           string
-	newContainer map[string]func(args ...interface{}) Command
+	newContainer map[string]func(args ...interface{}) interface{}
 	container    *string
 }
 
@@ -12,11 +12,11 @@ func (s *createNewScope) Execute() {
 	*s.container = s.id
 }
 
-func NewScopeCommand(args ...interface{}) Command {
+func NewScopeCommand(args ...interface{}) interface{} {
 	newScope := &createNewScope{
-		scopes:       args[0].(map[string]map[string]func(args ...interface{}) Command),
+		scopes:       args[0].(map[string]map[string]func(args ...interface{}) interface{}),
 		id:           args[1].(string),
-		newContainer: args[2].(map[string]func(args ...interface{}) Command),
+		newContainer: args[2].(map[string]func(args ...interface{}) interface{}),
 		container:    args[3].(*string),
 	}
 	return newScope
@@ -31,7 +31,7 @@ func (cs *setCurrentScope) Execute() {
 	*cs.currentScope = cs.scopeName
 }
 
-func NewCurrentScopeCommand(args ...interface{}) Command {
+func NewCurrentScopeCommand(args ...interface{}) interface{} {
 	currentScope := &setCurrentScope{
 		currentScope: args[0].(*string),
 		scopeName:    args[1].(string),

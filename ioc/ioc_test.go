@@ -35,9 +35,9 @@ func TestIoC_Resolve(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ioc := NewIoC()
 
-			ioc.Resolve("IoC.Register", "test", func(args ...interface{}) commands.Command {
+			ioc.Resolve("IoC.Register", "test", func(args ...interface{}) interface{} {
 				return commands.NewTestCommand1()
-			}).Execute()
+			}).(commands.Command).Execute()
 
 			deps := &deps{
 				ioc: ioc,
@@ -62,12 +62,12 @@ func TestIoC_ResolveWithScopes(t *testing.T) {
 				result := deps.ioc.Resolve("test")
 				require.Equal(t, commands.NewTestCommand1(), result)
 
-				deps.ioc.Resolve("Scopes.Current", "1").Execute()
+				deps.ioc.Resolve("Scopes.Current", "1").(commands.Command).Execute()
 
 				result = deps.ioc.Resolve("test")
 				require.Equal(t, commands.NewTestCommand2(), result)
 
-				deps.ioc.Resolve("Scopes.Current", "0").Execute()
+				deps.ioc.Resolve("Scopes.Current", "0").(commands.Command).Execute()
 
 				result = deps.ioc.Resolve("test")
 				require.Equal(t, commands.NewTestCommand1(), result)
@@ -79,14 +79,14 @@ func TestIoC_ResolveWithScopes(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			ioc := NewIoC()
 
-			ioc.Resolve("IoC.Register", "test", func(args ...interface{}) commands.Command {
+			ioc.Resolve("IoC.Register", "test", func(args ...interface{}) interface{} {
 				return commands.NewTestCommand1()
-			}).Execute()
-			ioc.Resolve("Scopes.New", "1").Execute()
-			ioc.Resolve("IoC.Register", "test", func(args ...interface{}) commands.Command {
+			}).(commands.Command).Execute()
+			ioc.Resolve("Scopes.New", "1").(commands.Command).Execute()
+			ioc.Resolve("IoC.Register", "test", func(args ...interface{}) interface{} {
 				return commands.NewTestCommand2()
-			}).Execute()
-			ioc.Resolve("Scopes.Current", "0").Execute()
+			}).(commands.Command).Execute()
+			ioc.Resolve("Scopes.Current", "0").(commands.Command).Execute()
 
 			deps := &deps{
 				ioc: ioc,
